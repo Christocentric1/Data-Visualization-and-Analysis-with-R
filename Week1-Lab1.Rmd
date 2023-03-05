@@ -1,0 +1,129 @@
+---
+title: "Lab One"
+author: "Frank"
+date: "2023-02-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+First we create the dataset with numbers 1 to 6.
+```{r}
+my_nums <-(1:6)
+powers <- my_nums^2
+powerData <- tibble(my_nums,powers)
+powerData
+```
+We can plot now. This code will not do much, as there is no specification of how to plot the data.
+```{r}
+ggplot(data=powerData)
+```
+We can add to the above code to state we want a scatterplot (use geom_point) and which the x and y variables are.
+```{r}
+ggplot(data=powerData) + geom_point(aes(x=my_nums, y=powers))
+```
+The code above is the same as the one below, where each line contains one aspect of the definition of the plot.
+```{r}
+p <- ggplot(data=powerData)
+p<- p + geom_point(aes(x=my_nums, y=powers))
+p
+```
+Adding a title, labels and a subtitle.
+```{r}
+p <- p + labs(title= "Numbers against their powers")
+p <- p + labs( x = "Number", y = "Power of number")
+p <- p + labs(subtitle = "Simple scatterplot")
+p
+```
+All the code put together, plus adding colour to the points.
+```{r}
+p <- ggplot(data=powerData)
+p <- p + geom_point(aes(x=my_nums, y=powers), colour="red")
+p <- p + labs(title= "Numbers against their powers")
+p <- p + labs( x = "Number", y = "Power of number")
+p <- p + labs(subtitle = "Simple scatterplot")
+p
+```
+Anscombe Quartet exercise
+
+Plotting each dataset.
+```{r}
+set1_x <- c(10,8,13,9,11,14,6,4,12,7,5)
+set1_y <- c(8.04,6.95,7.58,8.81,8.33,9.96,7.24,4.26, 10.84,4.82,5.68)
+data1 <- tibble(set1_x,set1_y)
+ggplot(data=data1) + geom_point(aes(x=set1_x, y=set1_y))
+```
+```{r}
+set2_x <- c(10,8,13,9,11,14,6,4,12,7,5)
+set2_y <- c(9.14,8.14,8.74,8.77,9.26,8.10,6.13,3.10,9.13,7.26,4.74)
+data2 <- tibble(set2_x,set2_y)
+ggplot(data=data2) + geom_point(aes(x=set2_x, y=set2_y))
+```
+```{r}
+set3_x <- c(10,8,13,9,11,14,6,4,12,7,5)
+set3_y <- c(7.46,6.77,12.74,7.11,7.81,8.84,6.08,5.39,8.15,6.42,5.73)
+data3 <- tibble(set3_x,set3_y)
+ggplot(data=data3) + geom_point(aes(x=set3_x, y=set3_y))
+```
+```{r}
+set4_x <- c(8,8,8,8,8,8,8,19,8,8,8)
+set4_y <- c(6.58,5.76,7.71,8.84,8.47,7.04,5.25,12.50,5.56,7.91,6.89)
+data4 <- tibble(set4_x,set4_y)
+ggplot(data=data4) + geom_point(aes(x=set4_x, y=set4_y))
+```
+
+Including nice labels in the plots. We have already defined the data, so we just need to plot it
+```{r}
+p <- ggplot(data=data1)
+p <- p + geom_point(aes(x=set1_x, y=set1_y))
+p <- p + labs(title = "Anscombe Quartet", subtitle="Dataset 1", y= "y values", x = "x values") 
+p
+```
+```{r}
+p <- ggplot(data=data2)
+p <- p + geom_point(aes(x=set2_x, y=set2_y))
+p <- p + labs(title= "Anscombe Quartet", subtitle="Dataset 2", y= "y values", x = "x values")
+p
+```
+```{r}
+p <- ggplot(data=data3)
+p <- p + geom_point(aes(x=set3_x, y=set3_y))
+p <- p + labs(title = "Anscombe Quartet", subtitle="Dataset 3", y= "y values", x = "x values")
+p
+```
+```{r}
+p <- ggplot(data=data4)
+p <- p + geom_point(aes(x=set4_x, y=set4_y))
+p <- p + labs(title = "Anscombe Quartet", subtitle="Dataset 4", y= "y values", x = "x values")
+p
+```
+```{r}
+p <- ggplot(data=data1)
+p <- p + geom_point(aes(x=set1_x, y=set1_y), colour="purple")
+p <- p + labs(title = "Anscombe Quartet", subtitle="Dataset 1", y= "y values", x = "x values") 
+p
+```
+```{r}
+p <- ggplot(data=data2)
+p <- p + geom_point(aes(x=set2_x, y=set2_y), colour="orange")
+p <- p + labs(title= "Anscombe Quartet", subtitle="Dataset 2", y= "y values", x = "x values")
+p
+```
+```{r}
+p <- ggplot(data=data3)
+p <- p + geom_point(aes(x=set3_x, y=set3_y), colour = "blue")
+p <- p + labs(title = "Anscombe Quartet", subtitle="Dataset 3", y= "y values", x = "x values")
+p
+```
+```{r}
+p <- ggplot(data=data4)
+p <- p + geom_point(aes(x=set4_x, y=set4_y), colour="limegreen")
+p <- p + labs(title = "Anscombe Quartet", subtitle="Dataset 4", y= "y values", x = "x values")
+p
+```
+

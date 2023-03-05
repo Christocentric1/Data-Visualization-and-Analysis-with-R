@@ -1,0 +1,220 @@
+---
+title: "Lab Two"
+author: "Frank"
+date: "2023-02-22"
+output: html_document
+---
+```{r}
+library(tidyverse)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+m <- c("CMM004", "CMM007", "CMM020", "CMM022", "CMM024", "CMM028", "CMM012","CMM513")
+
+mn <- c("SPE", "Intranet Systems Dev", "Data Vis and Analysis", "Databases", "OOP", "ITI and Administration", "Project Investigation", "MSc Project")
+
+cr <- c(15,15,15,15,15,15, 15, 45)
+
+whatToStudy <- data.frame(module = m, moduleName=mn, 
+                          credits = cr, stringsAsFactors=T)
+```
+
+```{r}
+whatToStudyT <- tibble(module = m, moduleName=mn,                           credits = cr)
+
+whatToStudyT <- whatToStudyT  |> mutate(across(where(is.character),as_factor))
+```
+
+```{r}
+whatToStudy$moduleName
+```
+```{r}
+whatToStudy[,2]
+```
+```{r}
+whatToStudy[4,]
+```
+```{r}
+whatToStudy$moduleName[3]
+```
+```{r}
+whatToStudy[3,2]
+```
+```{r}
+dim(whatToStudy)
+```
+```{r}
+nrow(whatToStudy)
+```
+```{r}
+ncol(whatToStudy)
+```
+```{r}
+summary(whatToStudy)
+```
+```{r}
+whatToStudyT[,2]
+```
+```{r}
+whatToStudyT[4,]
+```
+```{r}
+whatToStudyT$moduleName[3]
+```
+```{r}
+whatToStudyT[3,2]
+```
+```{r}
+dim(whatToStudyT)
+```
+```{r}
+nrow(whatToStudyT)
+```
+```{r}
+ncol(whatToStudyT)
+```
+```{r}
+summary(whatToStudyT)
+```
+```{r}
+pressureTemp <- read.csv("pressureTemp.csv", header=T, stringsAsFactors =T)
+
+summary(pressureTemp)
+```
+```{r}
+head(pressureTemp)
+```
+```{r}
+pressureTempTib <- read_csv("pressureTemp.csv" )
+pressureTempTib <- pressureTempTib |> 
+			mutate(across(where(is.character),as_factor))
+p
+```
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Pressure))
+p <- p + geom_histogram()
+p
+```
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Pressure))
+p <- p + geom_histogram(fill="blue")
+p
+```
+Setting the bin width to 4.
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Pressure))
+p <- p + geom_histogram(binwidth=8, fill="blue")
+p
+```
+Specifying that 10 bins are required (no binwidth in this case!).
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Pressure))
+p <- p + geom_histogram(bins=10, fill="blue")
+p
+```
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Temperature))
+p <- p + geom_histogram()
+p
+```
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Temperature))
+p <- p + geom_histogram(fill="orange")
+p
+```
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Temperature))
+p <- p + geom_histogram(bins=7, fill="lightblue")
+p
+```
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Temperature))
+p <- p + geom_histogram(binwidth=2, fill="violet")
+p
+```
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Readby))
+p <- p + geom_bar( fill="red")
+p
+```
+```{r}
+p <- ggplot(data = pressureTemp, aes(x=Readby))
+p <- p + geom_bar( fill="brown")
+p
+```
+```{r}
+consumption <- read.csv("consumption.csv", header=T, stringsAsFactors = T)
+
+## Column plot  for Energy in year X2035.
+```
+```{r}
+p <- ggplot(data = consumption, aes(x=Energy, y=X2035)) 
+p <- p + geom_col(fill="powderblue")
+p
+```
+```{r}
+p <- ggplot(consumption, aes(x=Energy, y=X2035)) 
+p <- p + geom_col(fill="pink")
+p
+```
+Loading the data file.
+```{r}
+consumptionTransposed <- read.csv("consumptionTransposed.csv",
+                                    header=T, stringsAsFactors = T)
+```
+```{r}
+p <- ggplot(consumptionTransposed, aes(x=Year, y=Oil)) 
+p <- p + geom_col(fill="pink")
+p
+```
+```{r}
+consumptionTransposed$Year <- as.factor(consumptionTransposed$Year)
+
+p <- ggplot(consumptionTransposed, aes(x=Year, y=Oil)) 
+p <- p + geom_col(fill="pink")
+p
+```
+The year values are taken as numeric, so the space between columns varies.
+```{r}
+consumptionTransposed$Year <- as.factor(consumptionTransposed$Year)
+```
+```{r}
+p <- ggplot(consumptionTransposed, aes(x=Year, y=Coal)) 
+p <- p + geom_col(fill="red")
+p
+```
+```{r}
+p <- ggplot(data= pressureTemp, aes(x=Readby, y=Temperature)) 
+p <- p+ geom_boxplot()
+p
+```
+```{r}
+p <- ggplot(pressureTemp, aes(x=Readby, y=Temperature)) 
+p <- p+ geom_boxplot(fill="red")
+p
+```
+```{r}
+p <- ggplot(pressureTemp, aes(x=Readby, y=Temperature)) 
+p <- p+ geom_boxplot(fill=c("pink", "blue", "green"))
+p
+```
+```{r}
+p <- ggplot(pressureTemp, aes(x=Readby, y=Temperature)) 
+p <- p+ geom_boxplot(fill=terrain.colors(3))
+p
+```
+```{r}
+p <- ggplot(pressureTemp, aes(x=Readby, y=Temperature)) 
+p <- p+ geom_boxplot(fill=topo.colors(3))
+p
+```
+```{r}
+p <- ggplot(pressureTemp, aes(x=Readby, y=Pressure)) 
+p <- p+ geom_boxplot(fill=topo.colors(3))
+p
+```
+
