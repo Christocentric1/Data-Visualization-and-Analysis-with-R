@@ -1,0 +1,200 @@
+---
+title: "Lab5"
+author: "Frank"
+date: "2023-03-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Setting the working directory to the folder where this file is.
+```{r}
+# use package "here"
+library(tidyverse)
+```
+
+Loading the data files.
+```{r}
+provenOilReserveWEurope <- read.csv("provenOilReserveWEurope.csv", header=T, stringsAsFactors=T)
+channels <- read.csv("channels.csv", header=T, stringsAsFactors=T)
+consumptionTransposed <- read.csv("consumptionTransposed.csv", header=T, stringsAsFactors=T)
+consumptionBySource <- read.csv("consumptionBySource.csv", header=T, stringsAsFactors=T)
+```
+
+## Plotting channels
+```{r}
+p <- ggplot(channels, aes(n))
+p <- p+geom_line(aes(y = electric, colour= "electric"))
+p <- p+geom_line(aes(y = length, colour ="length"))
+p <- p+geom_line(aes(y = area, colour= "area"))
+p<- p+scale_colour_hue("channels")
+p
+```
+### Adding better labels
+```{r}
+p <- ggplot(channels, aes(n))
+p <- p+geom_line(aes(y = electric, colour= "electric"))
+p <- p+geom_line(aes(y = length, colour ="length"))
+p <- p+geom_line(aes(y = area, colour= "area"))
+p <- p+scale_colour_hue("channels")
+p <-p+labs(x= "Size of stimuli", y= "Amount of sensation")
+p
+```
+### Adding better legends
+```{r}
+p <- ggplot(channels, aes(n))
+p <- p+geom_line(aes(y = electric, colour = "electric current"))
+p <- p+geom_line(aes(y = length, colour = "object’s length"))
+p <- p+geom_line(aes(y = area, colour = "object’s area"))
+p <- p+scale_colour_hue("channels")
+p<-p+labs(x= "size of stimuli", y= "size of sensation")
+p
+```
+### Changing y axis limits  to see detail for bottom part of plot. However;
+A warning will appear as not all data for electric is displayed (some of it falls outside the y limits).
+```{r}
+p <- ggplot(channels, aes(n))
+p <- p+geom_line(aes(y = electric, colour = "electric current"))
+p <- p+geom_line(aes(y = length, colour = "object’s length"))
+p <- p+geom_line(aes(y = area, colour = "object’s area"))
+p <- p+scale_colour_hue("channels")
+p<-p+labs(x= "size of stimuli", y= "size of sensation")
+p <- p+ylim(0,50) 
+p
+```
+### Removing electric
+```{r}
+# make a copy
+channels2 <- channels
+channels2$electric <-NULL 
+p <- ggplot(channels2, aes(n))
+p <- p+geom_line(aes(y = length, colour = "object’s length"))
+p <- p+geom_line(aes(y = area, colour = "object’s area"))
+p <- p+scale_colour_hue("channels")
+p<-p+labs(x= "size of stimuli", y= "size of sensation")
+p
+```
+### Removing all rows where the value for electric is over 50.
+```{r}
+channels2 <- channels[channels$electric < 50,]
+p <- ggplot(channels2, aes(n))
+p <- p+geom_line(aes(y = electric, colour = "electric current"))
+p <- p+geom_line(aes(y = length, colour = "object’s length"))
+p <- p+geom_line(aes(y = area, colour = "object’s area"))
+p <- p+scale_colour_hue("channels")
+p<-p+labs(x= "size of stimuli", y= "size of sensation")
+p
+```
+## Facets
+### Side by side plots
+```{r}
+p<- ggplot(provenOilReserveWEurope, aes(Year))
+p <- p+geom_line(aes(y = MT.Barrels))
+p<- p + facet_grid(. ~ Country)
+p
+```
+```{r}
+p<- ggplot(provenOilReserveWEurope, aes(Year))
+p <- p+geom_line(aes(y = MT.Barrels, colour = Country))
+p<- p + facet_grid(. ~ Country)
+p
+```
+### One plot under the other
+```{r}
+p<- ggplot(provenOilReserveWEurope, aes(Year))
+p <- p+geom_line(aes(y = MT.Barrels))
+p<- p + facet_grid(Country ~ .)
+p
+```
+#### Adding colour
+```{r}
+P <- ggplot(provenOilReserveWEurope, aes(Year))
+p <- p+geom_line(aes(y = MT.Barrels, colour=Country))
+p <- p + facet_grid(Country ~ .)
+p
+```
+#### Free y axis (different y scale for different plots)
+```{r}
+P <- ggplot(provenOilReserveWEurope, aes(Year))
+p <- p+geom_line(aes(y = MT.Barrels, colour=Country))
+p <- p + facet_grid(Country ~ ., scales="free_y")
+p
+```
+#### Free axis (both x and y axis)
+```{r}
+p<- ggplot(provenOilReserveWEurope, aes(Year)) 
+p <- p+geom_line(aes(y = MT.Barrels, colour=Country,linetype=Country))
+p<- p + facet_grid(Country ~ ., scales = "free")
+p
+```
+#### Using a point geom
+```{r}
+p <- ggplot(provenOilReserveWEurope, aes(Year))
+p <- p+geom_point(aes(y = MT.Barrels, colour=Country))
+p <- p + facet_grid(Country ~ ., scales="free_y")
+p
+```
+#### Using both point and line geoms
+```{r}
+p <- ggplot(provenOilReserveWEurope, aes(Year))
+p <- p+geom_point(aes(y = MT.Barrels, colour=Country))
+p <- p+geom_line(aes(y = MT.Barrels, colour=Country))
+p<- p + facet_grid(Country ~ ., scales="free_y")
+p
+```
+#### Using free space - space used for plot depends on data shown.
+```{r}
+p <- ggplot(provenOilReserveWEurope, aes(Year))
+p <- p+geom_point(aes(y = MT.Barrels, colour=Country))
+p <- p+geom_line(aes(y = MT.Barrels, colour=Country))
+p <- p + facet_grid(Country ~ ., scales = "free", space="free_y")
+p
+```
+First a solution with colours for the various energy sources chosen by default.
+```{r}
+p <- ggplot(consumptionTransposed, aes(Year))
+p <- p + geom_point(aes(y=Oil, colour="Oil") )
+p <- p + geom_point(aes(y=Gas, colour="Gas") )
+ p <- p + geom_point(aes(y=Coal, colour="Coal") )
+p <- p + geom_point(aes(y=Renewables, colour="Renewables (all kinds)"))
+p <- p + labs(x= "Year", y= "Millions of tons of oil equivalent", title="Energy consumed")
+p <- p+scale_colour_hue("Energy source")
+p
+```
+```{r}
+# Assigning the colours I want to use to the labels in the legand area
+plotColours <- c("Oil" = "brown", "Gas"="yellow", "Coal"= "black", "Renewables (all kinds)"="green")
+
+p <- ggplot(consumptionTransposed, aes(Year))
+p <- p + geom_point(aes(y=Oil, colour="Oil") )
+p <- p + geom_point(aes(y=Gas, colour="Gas") )
+ p <- p + geom_point(aes(y=Coal, colour="Coal") )
+p <- p + geom_point(aes(y=Renewables, colour="Renewables (all kinds)"))
+p <- p + labs(x= "Year", y= "Millions of tons of oil equivalent", title="Energy consumed",colour="Energy source")
+p <- p+ scale_colour_manual(values=plotColours)
+p
+```
+```{r}
+p <- ggplot(consumptionBySource, aes(Year))
+p <- p+geom_line(aes(y = MTOE, colour=Source))
+p <- p + facet_grid(Source ~ ., scales="free_y")
+p <- p + labs(x= "Year", y= "Millions of tons of oil equivalent", title="Energy consumed", colour="Energy source")
+p
+```
+```{r}
+p <- ggplot(consumptionBySource, aes(Year))
+p <- p+geom_point(aes(y = MTOE, colour=Source), shape= 24)
+p <- p + facet_grid(Source ~ ., scales="free_y")
+p <- p + labs(x= "Year", y= "Millions of tons of oil equivalent", title="Energy consumed", colour="Energy source")
+p
+```
+### Exercise 3 - alternative if we want the triangles to be filled
+```{r}
+p <- ggplot(consumptionBySource, aes(Year))
+p <- p+geom_point(aes(y = MTOE, colour=Source, fill=Source), shape= 24)
+p <- p + facet_grid(Source ~ ., scales="free_y")
+p <- p + labs(x= "Year", y= "Millions of tons of oil equivalent", title="Energy consumed")
+p
+```
+
